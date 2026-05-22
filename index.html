@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CEMEKANIKS25 | FTC Team 32838</title>
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <style>
+        :root {
+            --bg-dark: #050805;
+            --bg-card: rgba(10, 15, 10, 0.6);
+            --accent: #00ff41;
+            --accent-glow: rgba(0, 255, 65, 0.4);
+            --text-main: #f4f4f4;
+            --text-muted: #a0aab2;
+            --glass-border: rgba(0, 255, 65, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-dark); }
+        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
+
+        body { background-color: var(--bg-dark); color: var(--text-main); font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        h1, h2, h3, h4 { font-family: 'Rajdhani', sans-serif; text-transform: uppercase; }
+
+        /* NAVIGARE MODERNA */
+        nav {
+            position: fixed; top: 0; width: 100%; padding: 20px 5vw;
+            display: flex; justify-content: space-between; align-items: center;
+            z-index: 1000; background: rgba(5, 8, 5, 0.85); backdrop-filter: blur(12px);
+            border-bottom: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+        .logo { font-size: 28px; font-weight: 700; color: var(--text-main); letter-spacing: 2px; display: flex; align-items: center; gap: 10px; }
+        .logo span { color: var(--accent); }
+        
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a { 
+            color: var(--text-main); text-decoration: none; font-size: 14px; font-weight: 600; 
+            letter-spacing: 1px; transition: color 0.3s ease; text-transform: uppercase;
+        }
+        .nav-links a:hover { color: var(--accent); }
+
+        /* BUTON NEON PENTRU INSCRIERE */
+        .btn-neon {
+            background: transparent; color: var(--accent); border: 1px solid var(--accent);
+            padding: 12px 24px; font-family: 'Rajdhani', sans-serif; font-size: 18px; font-weight: 700;
+            cursor: pointer; position: relative; overflow: hidden; transition: all 0.3s ease;
+            text-decoration: none; display: inline-block;
+        }
+        .btn-neon:hover {
+            background: var(--accent); color: var(--bg-dark);
+            box-shadow: 0 0 15px var(--accent-glow), 0 0 30px var(--accent-glow);
+        }
+
+        /* HERO SECTION */
+        .hero {
+            height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
+            background: radial-gradient(circle at center, rgba(0, 255, 65, 0.1) 0%, rgba(5,8,5,1) 70%), url('imagini/hero-fundal.jpg') center/cover;
+        }
+        .hero h1 { font-size: 6rem; letter-spacing: 8px; margin-bottom: 10px; text-shadow: 0 0 20px rgba(0,0,0,0.8); }
+        .hero h2 { font-size: 2.5rem; color: var(--accent); letter-spacing: 4px; margin-bottom: 40px; }
+
+        /* SECTIUNEA SALAMANDRA (Efect Parallax) */
+        .salamander-section {
+            position: relative; padding: 150px 10vw; min-height: 80vh; display: flex; align-items: center;
+            background: linear-gradient(to right, rgba(5,8,5,1) 0%, rgba(5,8,5,0.4) 50%, rgba(5,8,5,1) 100%), 
+                        url('imagini/salamandra.jpg') no-repeat center center fixed;
+            background-size: cover; border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border);
+        }
+        .salamander-content { max-width: 600px; z-index: 2; }
+        .salamander-content h2 { font-size: 4.5rem; color: var(--accent); margin-bottom: 25px; line-height: 1; }
+        .salamander-content p {
+            font-size: 1.15rem; line-height: 1.8; color: #ddd; background: rgba(5, 8, 5, 0.75);
+            padding: 30px; border-left: 3px solid var(--accent); backdrop-filter: blur(10px); border-radius: 0 10px 10px 0;
+        }
+
+        /* PORTAL VALORI FTC */
+        .portal-section { padding: 120px 10vw; }
+        .section-header { text-align: center; margin-bottom: 80px; }
+        .section-header h2 { font-size: 3.5rem; color: var(--text-main); }
+        .section-header h2 span { color: var(--accent); }
+        
+        .values-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; }
+        .value-card {
+            background: var(--bg-card); border: 1px solid var(--glass-border); padding: 40px 30px;
+            border-radius: 12px; text-align: center; transition: all 0.4s ease; backdrop-filter: blur(10px);
+        }
+        .value-card:hover { transform: translateY(-10px); border-color: var(--accent); box-shadow: 0 10px 30px var(--accent-glow); }
+        .value-card h3 { font-size: 1.8rem; color: var(--accent); margin-bottom: 20px; }
+        .value-card p { color: var(--text-muted); line-height: 1.6; }
+
+        /* PORTAL RECRUTARE & FORMULAR */
+        .recruitment-container {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
+            background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: 20px;
+            overflow: hidden; backdrop-filter: blur(10px);
+        }
+        
+        .criteria-box { padding: 60px; background: rgba(0, 255, 65, 0.03); }
+        .criteria-step { margin-bottom: 40px; position: relative; padding-left: 30px; border-left: 2px dashed var(--glass-border); }
+        .criteria-step::before {
+            content: ''; position: absolute; left: -9px; top: 0; width: 16px; height: 16px;
+            background: var(--bg-dark); border: 2px solid var(--accent); border-radius: 50%;
+        }
+        .criteria-step h4 { font-size: 1.5rem; color: var(--text-main); margin-bottom: 10px; }
+        .criteria-step h4 span { color: var(--accent); font-size: 1rem; vertical-align: middle; margin-left: 10px; }
+        .criteria-step p { color: var(--text-muted); line-height: 1.6; font-size: 0.95rem; }
+
+        .form-box { padding: 60px; }
+        .form-group { margin-bottom: 25px; }
+        .form-group label { display: block; margin-bottom: 8px; font-family: 'Rajdhani', sans-serif; color: var(--text-muted); letter-spacing: 1px; }
+        .form-control {
+            width: 100%; padding: 15px; background: rgba(0,0,0,0.5); border: 1px solid var(--glass-border);
+            color: var(--text-main); font-family: 'Inter', sans-serif; border-radius: 6px; transition: all 0.3s ease;
+        }
+        .form-control:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
+        textarea.form-control { resize: vertical; min-height: 120px; }
+
+        /* BANDA SPONSORI PERFECT CONTINUA (5 Sponsori) */
+        .sponsors-wrapper {
+            padding: 60px 0; background: #030403; border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); overflow: hidden; position: relative;
+        }
+        /* Fade-uri pe margini pentru aspect premium */
+        .sponsors-wrapper::before, .sponsors-wrapper::after {
+            content: ''; position: absolute; top: 0; width: 150px; height: 100%; z-index: 2;
+        }
+        .sponsors-wrapper::before { left: 0; background: linear-gradient(to right, #030403 0%, transparent 100%); }
+        .sponsors-wrapper::after { right: 0; background: linear-gradient(to left, #030403 0%, transparent 100%); }
+
+        .marquee-track {
+            display: flex; width: max-content;
+            animation: scroll-perfect 20s linear infinite;
+        }
+        /* 5 sponsori + 5 dubluri = 10 imagini. Pentru a fi infinit, miscam track-ul exact 50% din latimea sa */
+        @keyframes scroll-perfect {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .sponsor-img {
+            height: 70px; margin: 0 60px; object-fit: contain;
+            filter: grayscale(100%) brightness(0.6); transition: all 0.4s ease;
+        }
+        .sponsor-img:hover { filter: grayscale(0%) brightness(1); transform: scale(1.1); }
+
+        /* FOOTER */
+        footer { padding: 50px 10vw; background: #020302; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--glass-border); }
+        .footer-info p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 5px; }
+        .footer-info span { color: var(--accent); }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">CEME<span>KANIKS</span>25</div>
+        <div class="nav-links">
+            <a href="#filosofie">Filosofie</a>
+            <a href="#valori">Valori FTC</a>
+            <a href="#recrutare">Recrutare</a>
+        </div>
+        <a href="#recrutare" class="btn-neon">APLICĂ ACUM</a>
+    </nav>
+
+    <!-- HERO SECTION -->
+    <section class="hero">
+        <h1 class="gsap-elem">EVOLUȚIE MECANICĂ</h1>
+        <h2 class="gsap-elem">RO32838</h2>
+        <a href="#filosofie" class="btn-neon gsap-elem" style="margin-top: 20px;">DESCOPERĂ ECHIPA</a>
+    </section>
+
+    <!-- FILOSOFIA SALAMANDREI -->
+    <section id="filosofie" class="salamander-section">
+        <div class="salamander-content gsap-fade-up">
+            <h2>Regenerare &<br>Adaptare</h2>
+            <p>Eșecul este doar un set de date. Așa cum salamandra își regenerează membrele, noi ne reconstruim mecanismele. Fiecare iterație ne face mai compacți, mai rapizi pe suprafața de joc și mai preciși. Nu există eroare fatală, există doar procesul de perfecționare tehnică.</p>
+        </div>
+    </section>
+
+    <!-- PORTAL VALORI FTC -->
+    <section id="valori" class="portal-section">
+        <div class="section-header gsap-fade-up">
+            <h2>Cultura <span>First Tech Challenge</span></h2>
+        </div>
+        <div class="values-grid">
+            <div class="value-card gsap-fade-up">
+                <h3>Gracious Professionalism</h3>
+                <p>Respectul reciproc și competiția acerbă pot coexista. Împărtășim cunoștințe, printăm piese 3D pentru alianțe și ridicăm nivelul întregii comunități tehnice.</p>
+            </div>
+            <div class="value-card gsap-fade-up" style="transition-delay: 0.1s;">
+                <h3>Coopertition</h3>
+                <p>Concurăm la cel mai înalt nivel pe teren, dar ajutăm și susținem echipele adverse în pit-uri. Adevărata inginerie nu este limitată de orgolii.</p>
+            </div>
+            <div class="value-card gsap-fade-up" style="transition-delay: 0.2s;">
+                <h3>Inovație Continuă</h3>
+                <p>De la schițe pe hârtie la ansambluri complexe în CAD și rulări de G-code pe router-ul CNC, căutăm mereu să depășim limitele hardware-ului standard.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- PORTAL RECRUTARE -->
+    <section id="recrutare" class="portal-section" style="padding-top: 0;">
+        <div class="section-header gsap-fade-up">
+            <h2>Alătură-te <span>Cemekaniks25</span></h2>
+        </div>
+        
+        <div class="recruitment-container gsap-fade-up">
+            <!-- Criterii de Inscriere -->
+            <div class="criteria-box">
+                <h3 style="color: var(--accent); margin-bottom: 40px; font-size: 2rem;">Traseul de Evoluție</h3>
+                
+                <div class="criteria-step">
+                    <h4>Stadiul 1: Voluntar <span>(Durată: 1 An)</span></h4>
+                    <p>Primul tău an este dedicat învățării și asimilării culturii noastre. Vei asista la designul în Onshape, vei înțelege principiile de bază ale asamblării, cablării și prelucrării. Testăm determinarea și capacitatea de a lucra sub presiune.</p>
+                </div>
+                
+                <div class="criteria-step">
+                    <h4>Stadiul 2: Membru Oficial</h4>
+                    <p>Odată ce ai demonstrat dedicare, devii o piesă de bază a mecanismului. Primești acces complet la tool-uri, responsabilități directe în proiectarea pieselor, operarea CNC-ului / imprimantelor 3D sau programarea autonomiei.</p>
+                </div>
+            </div>
+
+            <!-- Formular Interactiv -->
+            <div class="form-box">
+                <h3 style="color: var(--text-main); margin-bottom: 30px; font-size: 1.8rem;">Formular Înscriere Voluntari</h3>
+                <form action="#" method="POST">
+                    <div class="form-group">
+                        <label>Nume și Prenume</label>
+                        <input type="text" class="form-control" placeholder="ex: Popescu Ion" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Clasa și Profilul</label>
+                        <input type="text" class="form-control" placeholder="ex: a 9-a, Matematică-Informatică" required>
+                    </div>
+                    <div class="form-group">
+                        <label>De ce vrei în Cemekaniks25?</label>
+                        <textarea class="form-control" placeholder="Spune-ne despre pasiunea ta pentru robotică, programare, design 3D sau PR..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn-neon" style="width: 100%; text-align: center; margin-top: 10px;">TRIMITE APLICAȚIA</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- BANDA SPONSORI - 5 SPONSORI IN LOOP INFINIT -->
+    <div class="sponsors-wrapper">
+        <div class="marquee-track">
+            <!-- Setul original de 5 sponsori -->
+            <img src="imagini/sponsor1.png" class="sponsor-img" alt="Sponsor 1">
+            <img src="imagini/sponsor2.png" class="sponsor-img" alt="Sponsor 2">
+            <img src="imagini/sponsor3.png" class="sponsor-img" alt="Sponsor 3">
+            <img src="imagini/sponsor4.png" class="sponsor-img" alt="Sponsor 4">
+            <img src="imagini/sponsor5.png" class="sponsor-img" alt="Sponsor 5">
+            
+            <!-- Exact acelasi set copiat inca o data pentru iluzia de infinit -->
+            <img src="imagini/sponsor1.png" class="sponsor-img" alt="Sponsor 1">
+            <img src="imagini/sponsor2.png" class="sponsor-img" alt="Sponsor 2">
+            <img src="imagini/sponsor3.png" class="sponsor-img" alt="Sponsor 3">
+            <img src="imagini/sponsor4.png" class="sponsor-img" alt="Sponsor 4">
+            <img src="imagini/sponsor5.png" class="sponsor-img" alt="Sponsor 5">
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="footer-info">
+            <p>&copy; 2026 <span>CEMEKANIKS25</span> (RO32838).</p>
+            <p>Liceul Pedagogic "Spiru Haret", Focșani, România.</p>
+        </div>
+        <div class="footer-info" style="text-align: right;">
+            <p>Lead Design & Mechanics: <span>Hantoiu Denis Francesco</span></p>
+        </div>
+    </footer>
+
+    <!-- ANIMATII GSAP -->
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Animație Hero Text
+        gsap.fromTo(".gsap-elem", 
+            { y: 30, opacity: 0 }, 
+            { y: 0, opacity: 1, duration: 1, stagger: 0.2, ease: "power3.out", delay: 0.3 }
+        );
+
+        // Animație fade-up pe scroll
+        gsap.utils.toArray('.gsap-fade-up').forEach(element => {
+            gsap.fromTo(element, 
+                { y: 60, opacity: 0 }, 
+                { y: 0, opacity: 1, duration: 1, ease: "power2.out",
+                  scrollTrigger: {
+                      trigger: element,
+                      start: "top 85%", 
+                      toggleActions: "play none none reverse"
+                  }
+                }
+            );
+        });
+
+        // Efect pe Navigare la scroll (se face mai neagra cand dai in jos)
+        window.addEventListener("scroll", () => {
+            const nav = document.querySelector("nav");
+            if (window.scrollY > 50) {
+                nav.style.background = "rgba(5, 8, 5, 0.98)";
+                nav.style.padding = "15px 5vw";
+            } else {
+                nav.style.background = "rgba(5, 8, 5, 0.85)";
+                nav.style.padding = "20px 5vw";
+            }
+        });
+    </script>
+</body>
+</html>
