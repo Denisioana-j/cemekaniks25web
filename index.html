@@ -2,444 +2,1377 @@
 <html lang="ro">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CEMEKANIKS25 | FTC Team 32838</title>
-    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>CEMEKANIKS25 #32838 | Ecosistem Digital Avansat</title>
     <style>
+        /* --- 1. CONFIGURAȚII DE NUCLEU ȘI VARIABILE PRESTABILITE --- */
         :root {
-            --bg-dark: #050805;
-            --bg-card: rgba(10, 15, 10, 0.6);
-            --accent: #00ff41;
-            --accent-glow: rgba(0, 255, 65, 0.4);
-            --text-main: #f4f4f4;
-            --text-muted: #a0aab2;
-            --glass-border: rgba(0, 255, 65, 0.15);
+            --bg-pure: #000000;
+            --bg-deep: #050505;
+            --bg-surface: #0a0a0a;
+            --bg-card: #111111;
+            --bg-card-hover: #161616;
+            --neon-green: #00ff66;
+            --neon-green-rgb: 0, 255, 102;
+            --neon-green-dim: #00b347;
+            --text-pure: #ffffff;
+            --text-main: #f0f0f0;
+            --text-muted: #a0a0a0;
+            --text-dark: #666666;
+            --border-color: rgba(255, 255, 255, 0.05);
+            --transition-fluid: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            --transition-fast: all 0.2s ease;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* --- 2. RESETĂRI ȘI OPTIMIZĂRI DEECRAN ȘI SCROLL --- */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-pure);
+            color: var(--text-main);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Scrollbar Personalizat stil Industrial */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-pure);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #222;
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--neon-green);
+        }
+
+        /* --- 3. ACCELERARE HARDWARE ȘI FUNDAL FLUID (FERRARI ENGINE VIBE) --- */
+        #fluid-matrix-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.35;
+        }
+
+        /* --- 4. NAVIGAȚIE ȘI INTERFAȚĂ SUPERIOARĂ RESPONSIVĂ --- */
+        .app-header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 80px;
+            z-index: 1000;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 4%;
+        }
+
+        .brand-zone {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+        }
+
+        .brand-logo-node {
+            width: 32px;
+            height: 32px;
+            border: 2px solid var(--neon-green);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            color: var(--neon-green);
+            box-shadow: 0 0 10px rgba(0, 255, 102, 0.2);
+        }
+
+        .brand-name {
+            font-size: 1.2rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            color: var(--text-pure);
+            text-transform: uppercase;
+        }
+
+        .brand-name span {
+            color: var(--neon-green);
+        }
+
+        .desktop-nav {
+            display: flex;
+            gap: 5px;
+        }
+
+        .nav-link {
+            color: var(--text-muted);
+            text-decoration: none;
+            padding: 10px 18px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-radius: 6px;
+            transition: var(--transition-fast);
+        }
+
+        .nav-link:hover, .nav-link.active-route {
+            color: var(--neon-green);
+            background: rgba(0, 255, 102, 0.05);
+        }
+
+        /* Meniu Burger pentru Telefoane */
+        .mobile-menu-trigger {
+            display: none;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            flex-direction: column;
+            gap: 6px;
+            padding: 10px;
+            z-index: 1001;
+        }
+
+        .burger-line {
+            width: 24px;
+            height: 2px;
+            background-color: var(--text-pure);
+            transition: var(--transition-fast);
+        }
+
+        .mobile-drawer {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 80%;
+            max-width: 340px;
+            height: 100vh;
+            background: rgba(5, 5, 5, 0.98);
+            backdrop-filter: blur(30px);
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            padding: 100px 40px;
+            gap: 20px;
+            border-left: 1px solid var(--border-color);
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .mobile-drawer.open {
+            transform: translateX(-100%);
+        }
+
+        .mobile-drawer .nav-link {
+            font-size: 1.1rem;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.02);
+        }
+
+        /* --- 5. RUTARE VIRTUALĂ - PAGINI SIMULATE ÎN INDEX --- */
+        .view-frame {
+            position: relative;
+            width: 100%;
+            min-height: calc(100vh - 80px);
+            margin-top: 80px;
+            z-index: 10;
+            display: none; /* Ascunse implicit */
+            opacity: 0;
+            transform: scale(0.98);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+            padding: 60px 4%;
+        }
+
+        .view-frame.active-view {
+            display: block;
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* --- 6. DESIGN COMPONENTE SPECIFICE PAGINILOR --- */
         
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg-dark); }
-        ::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
-
-        body { background-color: var(--bg-dark); color: var(--text-main); font-family: 'Inter', sans-serif; overflow-x: hidden; }
-        h1, h2, h3, h4 { font-family: 'Rajdhani', sans-serif; text-transform: uppercase; }
-
-        /* NAVIGARE MODERNA */
-        nav {
-            position: fixed; top: 0; width: 100%; padding: 20px 5vw;
-            display: flex; justify-content: space-between; align-items: center;
-            z-index: 1000; background: rgba(5, 8, 5, 0.85); backdrop-filter: blur(12px);
-            border-bottom: 1px solid var(--glass-border);
-            transition: all 0.3s ease;
-        }
-        .logo { font-size: 28px; font-weight: 700; color: var(--text-main); letter-spacing: 2px; display: flex; align-items: center; gap: 10px; }
-        .logo span { color: var(--accent); }
-        
-        .nav-links { display: flex; gap: 30px; flex-wrap: wrap; justify-content: center; }
-        .nav-links a { 
-            color: var(--text-main); text-decoration: none; font-size: 14px; font-weight: 600; 
-            letter-spacing: 1px; transition: color 0.3s ease; text-transform: uppercase;
-        }
-        .nav-links a:hover { color: var(--accent); }
-
-        /* BUTON NEON PENTRU INSCRIERE */
-        .btn-neon {
-            background: transparent; color: var(--accent); border: 1px solid var(--accent);
-            padding: 12px 24px; font-family: 'Rajdhani', sans-serif; font-size: 18px; font-weight: 700;
-            cursor: pointer; position: relative; overflow: hidden; transition: all 0.3s ease;
-            text-decoration: none; display: inline-block;
-        }
-        .btn-neon:hover {
-            background: var(--accent); color: var(--bg-dark);
-            box-shadow: 0 0 15px var(--accent-glow), 0 0 30px var(--accent-glow);
+        /* Master Layouts Reutilizabile */
+        .container-max {
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
         }
 
-        /* HERO SECTION */
-        .hero {
-            height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center;
-            background: radial-gradient(circle at center, rgba(0, 255, 65, 0.1) 0%, rgba(5,8,5,1) 70%), url('imagini/hero-fundal.jpg') center/cover;
-        }
-        .hero h1 { font-size: 6rem; letter-spacing: 8px; margin-bottom: 10px; text-shadow: 0 0 20px rgba(0,0,0,0.8); }
-        .hero h2 { font-size: 2.5rem; color: var(--accent); letter-spacing: 4px; margin-bottom: 40px; }
-
-        /* SECTIUNEA SALAMANDRA (Efect Parallax) */
-        .salamander-section {
-            position: relative; padding: 150px 10vw; min-height: 80vh; display: flex; align-items: center;
-            background: linear-gradient(to right, rgba(5,8,5,1) 0%, rgba(5,8,5,0.4) 50%, rgba(5,8,5,1) 100%), 
-                        url('imagini/salamandra.jpg') no-repeat center center fixed;
-            background-size: cover; border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border);
-        }
-        .salamander-content { max-width: 600px; z-index: 2; }
-        .salamander-content h2 { font-size: 4.5rem; color: var(--accent); margin-bottom: 25px; line-height: 1; }
-        .salamander-content p {
-            font-size: 1.15rem; line-height: 1.8; color: #ddd; background: rgba(5, 8, 5, 0.75);
-            padding: 30px; border-left: 3px solid var(--accent); backdrop-filter: blur(10px); border-radius: 0 10px 10px 0;
+        .view-title-cluster {
+            margin-bottom: 50px;
+            text-align: center;
         }
 
-        /* PORTAL VALORI FTC */
-        .portal-section { padding: 120px 10vw; }
-        .section-header { text-align: center; margin-bottom: 80px; }
-        .section-header h2 { font-size: 3.5rem; color: var(--text-main); }
-        .section-header h2 span { color: var(--accent); }
-        
-        .values-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
-        .portal-link {
-            display: block; text-decoration: none; color: inherit;
+        .view-title-cluster h1 {
+            font-size: 3rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: -1px;
+            background: linear-gradient(180deg, #fff 0%, #666 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        .portal-link:focus-visible { outline: 3px solid rgba(0,255,65,0.5); outline-offset: 6px; }
-        .value-card {
-            background: rgba(10, 15, 10, 0.75); border: 1px solid var(--glass-border); padding: 40px 30px;
-            border-radius: 16px; text-align: left; transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease, background 0.35s ease;
-            backdrop-filter: blur(15px); min-height: 260px;
-        }
-        .value-card:hover {
-            transform: translateY(-10px);
-            border-color: var(--accent);
-            background: rgba(0, 255, 65, 0.08);
-            box-shadow: 0 18px 40px rgba(0,255,65,0.15);
-        }
-        .value-card h3 { font-size: 1.8rem; color: var(--accent); margin-bottom: 18px; }
-        .value-card p { color: var(--text-muted); line-height: 1.75; }
 
-        /* PORTAL RECRUTARE & FORMULAR */
-        .recruitment-container {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
-            background: var(--bg-card); border: 1px solid var(--glass-border); border-radius: 20px;
-            overflow: hidden; backdrop-filter: blur(10px);
+        .view-title-cluster h1 span {
+            background: linear-gradient(135deg, var(--neon-green) 0%, #00aa44 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        
-        .criteria-box { padding: 60px; background: rgba(0, 255, 65, 0.03); }
-        .criteria-step { margin-bottom: 40px; position: relative; padding-left: 30px; border-left: 2px dashed var(--glass-border); }
-        .criteria-step::before {
-            content: ''; position: absolute; left: -9px; top: 0; width: 16px; height: 16px;
-            background: var(--bg-dark); border: 2px solid var(--accent); border-radius: 50%;
-        }
-        .criteria-step h4 { font-size: 1.5rem; color: var(--text-main); margin-bottom: 10px; }
-        .criteria-step h4 span { color: var(--accent); font-size: 1rem; vertical-align: middle; margin-left: 10px; }
-        .criteria-step p { color: var(--text-muted); line-height: 1.6; font-size: 0.95rem; }
 
-        .form-box { padding: 60px; }
-        .form-group { margin-bottom: 25px; }
-        .form-group label { display: block; margin-bottom: 8px; font-family: 'Rajdhani', sans-serif; color: var(--text-muted); letter-spacing: 1px; }
-        .form-control {
-            width: 100%; padding: 15px; background: rgba(0,0,0,0.5); border: 1px solid var(--glass-border);
-            color: var(--text-main); font-family: 'Inter', sans-serif; border-radius: 6px; transition: all 0.3s ease;
+        /* PAGINA ACASĂ (HERO BLOCK) */
+        .hero-viewport {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            min-height: 70vh;
         }
-        .form-control:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 10px var(--accent-glow); }
-        textarea.form-control { resize: vertical; min-height: 120px; }
 
-        /* BANDA SPONSORI PERFECT CONTINUA (5 Sponsori) */
-        .sponsors-wrapper {
-            padding: 60px 0; background: #030403; border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); overflow: hidden; position: relative;
+        .hero-viewport h2 {
+            font-size: 5.5rem;
+            font-weight: 900;
+            letter-spacing: -3px;
+            line-height: 1;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            color: var(--text-pure);
         }
-        /* Fade-uri pe margini pentru aspect premium */
-        .sponsors-wrapper::before, .sponsors-wrapper::after {
-            content: ''; position: absolute; top: 0; width: 150px; height: 100%; z-index: 2;
+
+        .hero-viewport h2 span {
+            color: var(--neon-green);
+            text-shadow: 0 0 30px rgba(0, 255, 102, 0.2);
         }
-        .sponsors-wrapper::before { left: 0; background: linear-gradient(to right, #030403 0%, transparent 100%); }
-        .sponsors-wrapper::after { right: 0; background: linear-gradient(to left, #030403 0%, transparent 100%); }
+
+        .hero-viewport p {
+            font-size: 1.25rem;
+            color: var(--text-muted);
+            max-width: 700px;
+            line-height: 1.6;
+            margin-bottom: 40px;
+        }
+
+        /* Panou de Telemetrie Live Inovativ */
+        .telemetry-board {
+            width: 100%;
+            max-width: 1100px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .telemetry-node {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: left;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .telemetry-node::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, var(--neon-green), transparent);
+        }
+
+        .telemetry-meta {
+            font-size: 0.7rem;
+            color: var(--text-dark);
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            font-weight: 700;
+        }
+
+        .telemetry-data {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: var(--neon-green);
+            font-family: monospace;
+            margin-top: 8px;
+        }
+
+        /* BANDĂ RULANTĂ SPONSORI (INFINITE LOOP MECHANIC) */
+        .marquee-system {
+            width: 100%;
+            overflow: hidden;
+            background: #030303;
+            border-y: 1px solid var(--border-color);
+            padding: 35px 0;
+            margin: 60px 0;
+            position: relative;
+        }
 
         .marquee-track {
-            display: flex; width: max-content;
-            animation: scroll-perfect 20s linear infinite;
+            display: flex;
+            width: max-content;
+            animation: industrialScroll 25s linear infinite;
         }
-        /* 5 sponsori + 5 dubluri = 10 imagini. Pentru a fi infinit, miscam track-ul exact 50% din latimea sa */
-        @keyframes scroll-perfect {
+
+        .marquee-track:hover {
+            animation-play-state: paused;
+        }
+
+        .sponsor-unit {
+            background: rgba(255,255,255,0.01);
+            border: 1px solid rgba(255,255,255,0.03);
+            padding: 18px 45px;
+            margin-right: 35px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            transition: var(--transition-fast);
+        }
+
+        .sponsor-unit:hover {
+            color: var(--neon-green);
+            border-color: rgba(0, 255, 102, 0.2);
+            box-shadow: 0 0 15px rgba(0,255,102,0.05);
+            background: rgba(0,255,102,0.01);
+        }
+
+        @keyframes industrialScroll {
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); }
         }
 
-        .sponsor-img {
-            height: 70px; margin: 0 60px; object-fit: contain;
-            filter: none; transition: transform 0.4s ease, filter 0.4s ease;
+        /* PAGINA MEMBRI (CEI 12 DEDICAȚI CU CHENAR LUMINESCENT) */
+        .grid-matrix-12 {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
         }
-        .sponsor-img:hover { transform: scale(1.05); filter: saturate(1.1) brightness(1.05); }
 
-        /* FOOTER */
-        footer { padding: 50px 10vw; background: #020302; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--glass-border); }
-        .footer-info p { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 5px; }
-        .footer-info span { color: var(--accent); }
+        .grid-member-node {
+            background: var(--bg-card);
+            border-radius: 14px;
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            overflow: hidden;
+            position: relative;
+            transition: var(--transition-fluid);
+        }
+
+        /* Efect complex de tracking al luminii perimetrice */
+        .grid-member-node::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 14px;
+            padding: 1.5px;
+            background: linear-gradient(180deg, transparent 80%, rgba(255,255,255,0.03));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            transition: var(--transition-fluid);
+        }
+
+        .grid-member-node:hover {
+            transform: translateY(-8px);
+            border-color: rgba(0, 255, 102, 0.4);
+            box-shadow: 0 15px 35px rgba(0, 255, 102, 0.08);
+        }
+
+        .grid-member-node:hover::before {
+            background: linear-gradient(135deg, var(--neon-green), transparent 40%, var(--neon-green));
+        }
+
+        .member-visual-container {
+            width: 100%;
+            height: 340px;
+            background: #0d0d0d;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .member-visual-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%) contrast(1.1);
+            transition: var(--transition-fluid);
+        }
+
+        .grid-member-node:hover .member-visual-container img {
+            filter: grayscale(0%) contrast(1);
+            transform: scale(1.04);
+        }
+
+        .member-details-box {
+            padding: 22px;
+            background: linear-gradient(180deg, rgba(17,17,17,0) 0%, rgba(8,8,8,1) 100%);
+        }
+
+        .member-real-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-pure);
+        }
+
+        .member-assigned-role {
+            font-size: 0.8rem;
+            color: var(--neon-green);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 4px;
+        }
+
+        /* PAGINA CORE AI CHATBOT INTEGRAT (OPTIMIZAT MOBIL + CHIPURI PRESTABILITE) */
+        .ai-shell-layout {
+            display: grid;
+            grid-template-columns: 0.8fr 1.2fr;
+            gap: 40px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 35px;
+        }
+
+        .ai-meta-presentation h3 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .ai-meta-presentation p {
+            color: var(--text-muted);
+            line-height: 1.6;
+            font-size: 0.95rem;
+            margin-bottom: 25px;
+        }
+
+        .preset-prompts-tray {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .preset-chip {
+            background: rgba(255,255,255,0.02);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 12px 16px;
+            border-radius: 8px;
+            text-align: left;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+
+        .preset-chip:hover {
+            border-color: var(--neon-green);
+            background: rgba(0, 255, 102, 0.03);
+            color: var(--neon-green);
+        }
+
+        .ai-terminal-wrapper {
+            background: var(--bg-pure);
+            border: 1px solid rgba(0, 255, 102, 0.2);
+            border-radius: 14px;
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+        }
+
+        .terminal-screen {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .bubble-msg {
+            max-width: 85%;
+            padding: 14px 18px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            word-wrap: break-word;
+        }
+
+        .bubble-msg.ai-response {
+            background: rgba(0, 255, 102, 0.04);
+            color: var(--text-main);
+            align-self: flex-start;
+            border-left: 3px solid var(--neon-green);
+        }
+
+        .bubble-msg.user-query {
+            background: #1a1a1a;
+            color: var(--text-pure);
+            align-self: flex-end;
+        }
+
+        .terminal-input-bar {
+            display: flex;
+            border-top: 1px solid var(--border-color);
+            background: #080808;
+        }
+
+        .terminal-input-bar input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            padding: 18px;
+            color: var(--text-pure);
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .terminal-input-bar button {
+            background: var(--neon-green);
+            border: none;
+            padding: 0 28px;
+            font-weight: 700;
+            color: var(--bg-pure);
+            cursor: pointer;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            transition: var(--transition-fast);
+        }
+
+        .terminal-input-bar button:hover {
+            background: var(--neon-green-dim);
+        }
+
+        /* PAGINA RECRUTARE (FORMULAR DE ÎNALTĂ CALITATE) */
+        .form-master-box {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            padding: 45px;
+            max-width: 850px;
+            margin: 0 auto;
+        }
+
+        .statut-alert-banner {
+            background: rgba(0, 255, 102, 0.03);
+            border: 1px solid rgba(0, 255, 102, 0.2);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 40px;
+            display: flex;
+            gap: 15px;
+            align-items: flex-start;
+        }
+
+        .statut-alert-banner .icon {
+            font-size: 1.3rem;
+            color: var(--neon-green);
+        }
+
+        .statut-alert-banner p {
+            font-size: 0.9rem;
+            line-height: 1.5;
+            color: var(--text-main);
+        }
+
+        .statut-alert-banner strong {
+            color: var(--neon-green);
+        }
+
+        .input-grid-system {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+        }
+
+        .input-row-full {
+            grid-column: span 2;
+        }
+
+        .field-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .field-group label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .field-group input, .field-group textarea {
+            background: var(--bg-pure);
+            border: 1px solid rgba(255,255,255,0.08);
+            padding: 14px 16px;
+            border-radius: 8px;
+            color: var(--text-pure);
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: var(--transition-fast);
+        }
+
+        .field-group input:focus, .field-group textarea:focus {
+            border-color: var(--neon-green);
+            outline: none;
+            box-shadow: 0 0 12px rgba(0, 255, 102, 0.1);
+        }
+
+        .character-tracker-label {
+            font-size: 0.75rem;
+            color: var(--text-dark);
+            text-align: right;
+            margin-top: 6px;
+        }
+
+        .dispatch-form-button {
+            background: transparent;
+            border: 1px solid var(--neon-green);
+            color: var(--neon-green);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            padding: 16px 40px;
+            font-size: 0.9rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            margin-top: 15px;
+        }
+
+        .dispatch-form-button:hover {
+            background: var(--neon-green);
+            color: var(--bg-pure);
+            box-shadow: 0 0 25px rgba(0, 255, 102, 0.25);
+        }
+
+        /* PAGINA LOCAȚIE ȘI CONTACT (6 PERSOANE CHEIE + ORAR + HARTĂ) */
+        .contact-view-split {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 40px;
+        }
+
+        .hardware-map-box {
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+            height: 520px;
+            background: #0f0f0f;
+        }
+
+        .hardware-map-box iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            filter: grayscale(1) invert(0.95) contrast(1.1);
+        }
+
+        .personnel-directory-panel {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .directory-header h3 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 5px;
+        }
+
+        .directory-header p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .personnel-scroller {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            max-height: 480px;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+
+        .personnel-card-row {
+            background: rgba(255,255,255,0.01);
+            border: 1px solid rgba(255,255,255,0.03);
+            border-radius: 10px;
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition-fast);
+        }
+
+        .personnel-card-row:hover {
+            background: rgba(255,255,255,0.02);
+            border-color: rgba(255,255,255,0.06);
+        }
+
+        .person-identity h4 {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-pure);
+        }
+
+        .person-identity p {
+            font-size: 0.75rem;
+            color: var(--neon-green);
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-top: 2px;
+        }
+
+        .person-availability-hours {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .person-comms-block {
+            text-align: right;
+        }
+
+        .phone-anchor {
+            font-size: 0.85rem;
+            font-family: monospace;
+            color: var(--text-pure);
+            text-decoration: none;
+            font-weight: 700;
+        }
+
+        .phone-anchor:hover {
+            color: var(--neon-green);
+        }
+
+        .live-status-pill {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
+
+        .live-status-pill.online {
+            background: rgba(0, 255, 102, 0.08);
+            color: var(--neon-green);
+        }
+
+        /* --- 7. SUBSISTEM RESPONSIV COMPLET (MOBILE FIRST & BREAKPOINTS) --- */
+        @media (max-width: 1024px) {
+            .ai-shell-layout, .contact-view-split {
+                grid-template-columns: 1fr;
+            }
+            .hero-viewport h2 { font-size: 4rem; }
+            .telemetry-board { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .desktop-nav { display: none; }
+            .mobile-menu-trigger { display: flex; }
+            .hero-viewport h2 { font-size: 2.8rem; letter-spacing: -1px; }
+            .hero-viewport p { font-size: 1rem; }
+            .input-grid-system { grid-template-columns: 1fr; }
+            .input-row-full { grid-column: span 1; }
+            .telemetry-board { grid-template-columns: 1fr; }
+            .view-title-cluster h1 { font-size: 2.2rem; }
+            .form-master-box { padding: 25px; }
+        }
     </style>
 </head>
 <body>
 
-    <nav>
-        <div class="logo">CEME<span>KANIKS</span>25</div>
-        <div class="nav-links">
-            <a href="#filosofie">Filosofie</a>
-            <a href="#valori">Valori FTC</a>
-            <a href="#recrutare">Recrutare</a>
-        </div>
-        <a href="#recrutare" class="btn-neon">APLICĂ ACUM</a>
-    </nav>
+    <canvas id="fluid-matrix-canvas"></canvas>
 
-    <!-- HERO SECTION -->
-    <section class="hero">
-        <h1 class="gsap-elem">EVOLUTIE MECANICĂ</h1>
-        <h2 class="gsap-elem">32838</h2>
-        <a href="#filosofie" class="btn-neon gsap-elem" style="margin-top: 20px;">DESCOPERĂ ECHIPA</a>
-    </section>
-
-    <!-- FILOSOFIA SALAMANDREI -->
-    <section id="filosofie" class="salamander-section">
-        <div class="salamander-content gsap-fade-up">
-            <h2>Regenerare &<br>Adaptare</h2>
-            <p>Eșecul este doar un set de date. Așa cum salamandra își regenerează membrele, noi ne reconstruim mecanismele. Fiecare iterație ne face mai compacți, mai rapizi pe suprafața de joc și mai preciși. Nu există eroare fatală, există doar procesul de perfecționare tehnică.</p>
-        </div>
-    </section>
-
-    <!-- PORTAL VALORI FTC -->
-    <section id="valori" class="portal-section">
-        <div class="section-header gsap-fade-up">
-            <h2>Cultura <span>First Tech Challenge</span></h2>
-        </div>
-        <div class="values-grid">
-            <a href="#filosofie" class="portal-link">
-                <div class="value-card gsap-fade-up">
-                    <h3>Gracious Professionalism</h3>
-                    <p>Respectul reciproc și competiția acerbă pot coexista. Împărtășim cunoștințe, printăm piese 3D pentru alianțe și ridicăm nivelul întregii comunități tehnice.</p>
-                </div>
-            </a>
-            <a href="#valori" class="portal-link">
-                <div class="value-card gsap-fade-up" style="transition-delay: 0.1s;">
-                    <h3>Coopertition</h3>
-                    <p>Concurăm la cel mai înalt nivel pe teren, dar ajutăm și susținem echipele adverse în pit-uri. Adevărata inginerie nu este limitată de orgolii.</p>
-                </div>
-            </a>
-            <a href="#recrutare" class="portal-link">
-                <div class="value-card gsap-fade-up" style="transition-delay: 0.2s;">
-                    <h3>Inovație Continuă</h3>
-                    <p>De la schițe pe hârtie la ansambluri complexe în CAD și rulări de G-code pe router-ul CNC, căutăm mereu să depășim limitele hardware-ului standard.</p>
-                </div>
-            </a>
-        </div>
-    </section>
-
-    <!-- PORTAL RECRUTARE -->
-    <section id="recrutare" class="portal-section" style="padding-top: 0;">
-        <div class="section-header gsap-fade-up">
-            <h2>Alătură-te <span>Cemekaniks25</span></h2>
-        </div>
+    <header class="app-header">
+        <a href="#" class="brand-zone" onclick="routeVirtual(event, 'page-acasa')">
+            <div class="brand-logo-node">Ω</div>
+            <div class="brand-name">CEME<span>KANIKS25</span></div>
+        </a>
         
-        <div class="recruitment-container gsap-fade-up">
-            <!-- Criterii de Inscriere -->
-            <div class="criteria-box">
-                <h3 style="color: var(--accent); margin-bottom: 40px; font-size: 2rem;">Traseul de Evoluție</h3>
-                
-                <div class="criteria-step">
-                    <h4>Stadiul 1: Voluntar <span>(Durată: 1 An)</span></h4>
-                    <p>Primul tău an este dedicat învățării și asimilării culturii noastre. Vei asista la designul în Onshape, vei înțelege principiile de bază ale asamblării, cablării și prelucrării. Testăm determinarea și capacitatea de a lucra sub presiune.</p>
-                </div>
-                
-                <div class="criteria-step">
-                    <h4>Stadiul 2: Membru Oficial</h4>
-                    <p>Odată ce ai demonstrat dedicare, devii o piesă de bază a mecanismului. Primești acces complet la tool-uri, responsabilități directe în proiectarea pieselor, operarea CNC-ului / imprimantelor 3D sau programarea autonomiei.</p>
-                </div>
-            </div>
+        <nav class="desktop-nav">
+            <a href="#" class="nav-link active-route" onclick="routeVirtual(event, 'page-acasa')">Acasă</a>
+            <a href="#" class="nav-link" onclick="routeVirtual(event, 'page-membri')">Membri</a>
+            <a href="#" class="nav-link" onclick="routeVirtual(event, 'page-ai-core')">AI Hub</a>
+            <a href="#" class="nav-link" onclick="routeVirtual(event, 'page-recrutare')">Recrutare</a>
+            <a href="#" class="nav-link" onclick="routeVirtual(event, 'page-contact')">Contact</a>
+        </nav>
 
-            <!-- Formular Interactiv -->
-            <div class="form-box">
-                <h3 style="color: var(--text-main); margin-bottom: 30px; font-size: 1.8rem;">Formular Înscriere Voluntari</h3>
+        <button class="mobile-menu-trigger" onclick="toggleMobileDrawer()">
+            <div class="burger-line" id="b-line1"></div>
+            <div class="burger-line" id="b-line2"></div>
+            <div class="burger-line" id="b-line3"></div>
+        </button>
+    </header>
 
-                <div data-fs-success style="display:none;color:var(--accent);margin-bottom:10px;">Mulțumim — aplicația ta a fost trimisă.</div>
-                <div data-fs-error style="display:none;color:#ff6b6b;margin-bottom:10px;"></div>
-
-                <form id="inscriere-form" action="https://formspree.io/f/xdavnpnk" method="POST">
-                    <input type="hidden" name="_subject" value="Aplicație Cemekaniks25">
-                    <div class="form-group">
-                        <label>Nume și Prenume</label>
-                        <input type="text" name="nume" class="form-control" placeholder="ex: Popescu Ion" required data-fs-field>
-                        <span data-fs-error="nume"></span>
-                    </div>
-                    <div class="form-group">
-                        <label>Clasa și Profilul</label>
-                        <input type="text" name="clasa" class="form-control" placeholder="ex: a 9-a, Matematică-Informatică" required data-fs-field>
-                        <span data-fs-error="clasa"></span>
-                    </div>
-                    <div class="form-group">
-                        <label>De ce vrei în Cemekaniks25?</label>
-                        <textarea name="motivatie" class="form-control" placeholder="Spune-ne despre pasiunea ta pentru robotică, programare, design 3D sau PR..." required data-fs-field></textarea>
-                        <span data-fs-error="motivatie"></span>
-                    </div>
-                    <button type="submit" class="btn-neon" style="width: 100%; text-align: center; margin-top: 10px;" data-fs-submit-btn>TRIMITE APLICAȚIA</button>
-                </form>
-            </div>
-        </div>
-    </section>
-
-    <!-- BANDA SPONSORI - 5 SPONSORI IN LOOP INFINIT -->
-    <div class="sponsors-wrapper">
-        <div class="marquee-track">
-            <!-- Setul original de 5 sponsori -->
-            <img src="imagini/sponsor1.png" class="sponsor-img" alt="Sponsor 1">
-            <img src="imagini/sponsor2.png" class="sponsor-img" alt="Sponsor 2">
-            <img src="imagini/sponsor3.png" class="sponsor-img" alt="Sponsor 3">
-            <img src="imagini/sponsor4.png" class="sponsor-img" alt="Sponsor 4">
-            <img src="imagini/sponsor5.png" class="sponsor-img" alt="Sponsor 5">
-            
-            <!-- Exact acelasi set copiat inca o data pentru iluzia de infinit -->
-            <img src="imagini/sponsor1.png" class="sponsor-img" alt="Sponsor 1">
-            <img src="imagini/sponsor2.png" class="sponsor-img" alt="Sponsor 2">
-            <img src="imagini/sponsor3.png" class="sponsor-img" alt="Sponsor 3">
-            <img src="imagini/sponsor4.png" class="sponsor-img" alt="Sponsor 4">
-            <img src="imagini/sponsor5.png" class="sponsor-img" alt="Sponsor 5">
-        </div>
+    <div class="mobile-drawer" id="side-drawer">
+        <a href="#" class="nav-link" onclick="routeVirtual(event, 'page-acasa')">Acasă</a>
+        <a href="#" class="nav-link" onclick="routeVirtual(event, 'page-membri')">Membri</a>
+        <a href="#" class="nav-link" onclick="routeVirtual(event, 'page-ai-core')">AI Hub</a>
+        <a href="#" class="nav-link" onclick="routeVirtual(event, 'page-recrutare')">Recrutare</a>
+        <a href="#" class="nav-link" onclick="routeVirtual(event, 'page-contact')">Contact</a>
     </div>
 
-    <!-- FOOTER -->
-    <footer>
-        <div class="footer-info">
-            <p>&copy; 2026 <span>CEMEKANIKS25</span> (32838).</p>
-            <p>Liceul Economic M.Kogalniceanu, Focsani, România.</p>
-        </div>
+    <main class="container-max">
 
-    </footer>
+        <section id="page-acasa" class="view-frame active-view">
+            <div class="hero-viewport">
+                <h2>FTC TEAM <span>#32838</span></h2>
+                <p>Echipa de robotică a Liceului Economic din Focșani. Îmbinăm designul industrial computat în CAD cu prelucrările de înaltă finețe la CNC și programarea algoritmică autonomă.</p>
+                
+                <div class="telemetry-board">
+                    <div class="telemetry-node">
+                        <div class="telemetry-meta">Frecvență Magistrală</div>
+                        <div class="telemetry-data" id="tm-freq">48.00 MHz</div>
+                    </div>
+                    <div class="telemetry-node">
+                        <div class="telemetry-meta">Tensiune Celule</div>
+                        <div class="telemetry-data" id="tm-volt">13.82 V</div>
+                    </div>
+                    <div class="telemetry-node">
+                        <div class="telemetry-meta">Rata de Loop Autonom</div>
+                        <div class="telemetry-data" id="tm-loop">1.9 ms</div>
+                    </div>
+                    <div class="telemetry-node">
+                        <div class="telemetry-meta">Temperatură Drivere</div>
+                        <div class="telemetry-data" id="tm-temp">34.2 °C</div>
+                    </div>
+                </div>
+            </div>
 
-    <!-- ANIMATII GSAP -->
+            <div class="marquee-system">
+                <div class="marquee-track">
+                    <!-- Această secțiune este pentru sponsori - nu o șterge! -->
+                    <div class="sponsor-unit">TOP-SECRET</div>
+                    <div class="sponsor-unit">TOP-SECRET</div>
+                    <div class="sponsor-unit">TOP-SECRET</div>
+                    <div class="sponsor-unit">TOP-SECRET</div>
+                    <div class="sponsor-unit">TOP-SECRET</div>
+                    <div class="sponsor-unit">TOP-SECRET</div>
+                    <div class="sponsor-unit">TOP-SECRET</div>
+                    <div class="sponsor-unit">TOP-SECRET</div>
+                    <div class="sponsor-unit">TOP-SECRET</div>
+                    <div class="sponsor-unit">TOP-SECRET</div>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="page-membri" class="view-frame">
+            <div class="view-title-cluster">
+                <h1>Membrii <span>Echipei</span></h1>
+            </div>
+            
+            <div class="grid-matrix-12">
+                <div class="grid-member-node">
+                    <div class="member-visual-container">
+                        <img src="imagini/membru_1.jpg" alt="Membru 1" onerror="placeholderSVG(this, 'Membru 1')">
+                    </div>
+                    <div class="member-details-box">
+                        <div class="member-real-name">Membru 1</div>
+                        <div class="member-assigned-role">Team Leader & CAD Leader</div>
+                    </div>
+                </div>
+                <div class="grid-member-node">
+                    <div class="member-visual-container">
+                        <img src="imagini/membru_2.jpg" alt="Membru 2" onerror="placeholderSVG(this, 'Membru 2')">
+                    </div>
+                    <div class="member-details-box">
+                        <div class="member-real-name">Membru 2</div>
+                        <div class="member-assigned-role">Mecanic Șef CNC</div>
+                    </div>
+                </div>
+                <div class="grid-member-node">
+                    <div class="member-visual-container">
+                        <img src="imagini/membru_3.jpg" alt="Membru 3" onerror="placeholderSVG(this, 'Membru 3')">
+                    </div>
+                    <div class="member-details-box">
+                        <div class="member-real-name">Membru 3</div>
+                        <div class="member-assigned-role">Lead Software Engineer</div>
+                    </div>
+                </div>
+                <div class="grid-member-node">
+                    <div class="member-visual-container">
+                        <img src="imagini/membru_4.jpg" alt="Membru 4" onerror="placeholderSVG(this, 'Membru 4')">
+                    </div>
+                    <div class="member-details-box">
+                        <div class="member-real-name">Membru 4</div>
+                        <div class="member-assigned-role">3D Printing Operator</div>
+                    </div>
+                </div>
+                <div class="grid-member-node">
+                    <div class="member-visual-container">
+                        <img src="imagini/membru_5.jpg" alt="Membru 5" onerror="placeholderSVG(this, 'Membru 5')">
+                    </div>
+                    <div class="member-details-box">
+                        <div class="member-real-name">Membru 5</div>
+                        <div class="member-assigned-role">Driver Operator Robot</div>
+                    </div>
+                </div>
+                <div class="grid-member-node">
+                    <div class="member-visual-container">
+                        <img src="imagini/membru_6.jpg" alt="Membru 6" onerror="placeholderSVG(this, 'Membru 6')">
+                    </div>
+                    <div class="member-details-box">
+                        <div class="member-real-name">Membru 6</div>
+                        <div class="member-assigned-role">Asistent Proiectare CAD</div>
+                    </div>
+                </div>
+                <div class="grid-member-node">
+                    <div class="member-visual-container">
+                        <img src="imagini/membru_7.jpg" alt="Membru 7" onerror="placeholderSVG(this, 'Membru 7')">
+                    </div>
+                    <div class="member-details-box">
+                        <div class="member-real-name">Membru 7</div>
+                        <div class="member-assigned-role">Head of Marketing & Media</div>
+                    </div>
+                </div>
+                <div class="grid-member-node">
+                    <div class="member-visual-container">
+                        <img src="imagini/membru_8.jpg" alt="Membru 8" onerror="placeholderSVG(this, 'Membru 8')">
+                    </div>
+                    <div class="member-details-box">
+                        <div class="member-real-name">Membru 8</div>
+                        <div class="member-assigned-role">Cercetător Documentație</div>
+                    </div>
+                </div>
+                <div class="grid-member-node">
+                    <div class="member-visual-container">
+                        <img src="imagini/membru_9.jpg" alt="Membru 9" onerror="placeholderSVG(this, 'Membru 9')">
+                    </div>
+                    <div class="member-details-box">
+                        <div class="member-real-name">Membru 9</div>
+                        <div class="member-assigned-role">Asistent Programare Java</div>
+                    </div>
+                </div>
+                <div class="grid-member-node">
+                    <div class="member-visual-container">
+                        <img src="imagini/membru_10.jpg" alt="Membru 10" onerror="placeholderSVG(this, 'Membru 10')">
+                    </div>
+                    <div class="member-details-box">
+                        <div class="member-real-name">Membru 10</div>
+                        <div class="member-assigned-role">Logistcian Materiale</div>
+                    </div>
+                </div>
+                <div class="grid-member-node">
+                    <div class="member-visual-container">
+                        <img src="imagini/membru_11.jpg" alt="Membru 11" onerror="placeholderSVG(this, 'Membru 11')">
+                    </div>
+                    <div class="member-details-box">
+                        <div class="member-real-name">Membru 11</div>
+                        <div class="member-assigned-role">Fotograf & Editor Video</div>
+                    </div>
+                </div>
+                <div class="grid-member-node">
+                    <div class="member-visual-container">
+                        <img src="imagini/membru_12.jpg" alt="Membru 12" onerror="placeholderSVG(this, 'Membru 12')">
+                    </div>
+                    <div class="member-details-box">
+                        <div class="member-real-name">Membru 12</div>
+                        <div class="member-assigned-role">Designer Identitate Vizuală</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="page-ai-core" class="view-frame">
+            <div class="view-title-cluster">
+                <h1>Core <span>AI Engine</span></h1>
+            </div>
+            
+            <div class="ai-shell-layout">
+                <div class="ai-meta-presentation">
+                    <h3>Interfață Predicții</h3>
+                    <p>Selectează un cip de comandă rapidă de mai jos sau scrie întrebarea în consolă pentru a primi detalii instantanee despre FIRST, structura internă sau programul mentorilor.</p>
+                    
+                    <div class="preset-prompts-tray">
+                        <button class="preset-chip" onclick="injectPresetPrompt('Ce este sistemul competițional FIRST?')">Ce este sistemul competițional FIRST?</button>
+                        <button class="preset-chip" onclick="injectPresetPrompt('Cu ce se ocupă echipa CEMEKANIKS25?')">Cu ce se ocupă echipa CEMEKANIKS25?</button>
+                        <button class="preset-chip" onclick="injectPresetPrompt('Care este programul Profesorului Coordonator?')">Care este programul Profesorului Coordonator?</button>
+                        <button class="preset-chip" onclick="injectPresetPrompt('Verifică disponibilitatea generală din atelier')">Verifică disponibilitatea generală din atelier</button>
+                    </div>
+                </div>
+
+                <div class="ai-terminal-wrapper">
+                    <div class="terminal-screen" id="ai-chathistory">
+                        <div class="bubble-msg ai-response">Consola CEMK-AI activată. Sistemele sunt gata pentru interogare rapidă.</div>
+                    </div>
+                    <div class="terminal-input-bar">
+                        <input type="text" id="ai-usertext" placeholder="Scrie o întrebare sau selectează un cip..." onkeydown="if(event.key === 'Enter') processAICoreQuery()">
+                        <button onclick="processAICoreQuery()">Execută</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="page-recrutare" class="view-frame">
+            <div class="view-title-cluster">
+                <h1>Recrutare <span>Membri</span></h1>
+            </div>
+            
+            <div class="form-master-box">
+                <div class="statut-alert-banner">
+                    <div class="icon">⚡</div>
+                    <p><strong>Clauză Regulament:</strong> Primul an în cadrul echipei noastre este considerat <strong>an de voluntariat activ</strong>. Trecerea la statutul permanent de <strong>membru de drept</strong> cu drepturi operaționale depline pe aparatura CNC/CAD se realizează din al doilea an, pe baza evaluării tehnice.</p>
+                </div>
+
+                <form id="recruitment-form" action="https://formspree.io/f/xeewjdde" method="POST">
+                    <div class="input-grid-system">
+                        <div class="field-group">
+                            <label for="app-nume">Nume</label>
+                            <input type="text" id="app-nume" name="nume" placeholder="Numele de familie" required>
+                        </div>
+                        <div class="field-group">
+                            <label for="app-prenume">Prenume</label>
+                            <input type="text" id="app-prenume" name="prenume" placeholder="Prenumele" required>
+                        </div>
+                        <div class="field-group">
+                            <label for="app-email">E-mail Securizat</label>
+                            <input type="email" id="app-email" name="email" placeholder="adresa@mail.com" required>
+                        </div>
+                        <div class="field-group">
+                            <label for="app-telefon">Număr Telefon</label>
+                            <input type="tel" id="app-telefon" name="telefon" placeholder="07xxxxxxxx" required>
+                        </div>
+                        <div class="field-group">
+                            <label for="app-clasa">Clasa</label>
+                            <input type="text" id="app-clasa" name="clasa" placeholder="Ex: a X-a F" required>
+                        </div>
+                        <div class="field-group">
+                            <label for="app-profil">Profil</label>
+                            <input type="text" id="app-profil" name="profil" placeholder="Ex: Economie" required>
+                        </div>
+                        <div class="field-group input-row-full">
+                            <label for="app-motiv">Motivul pentru care dorești să participi (Max. 250 caractere)</label>
+                            <textarea id="app-motiv" name="motiv" rows="4" maxlength="250" placeholder="Descrie motivația ta tehnică sau administrativă..." oninput="trackChars(this)" required></textarea>
+                            <div class="character-tracker-label"><span id="char-count-node">0</span> / 250 caractere</div>
+                        </div>
+                    </div>
+                    <button type="submit" class="dispatch-form-button">Trimite Dosarul</button>
+                </form>
+            </div>
+        </section>
+
+
+        <section id="page-contact" class="view-frame">
+            <div class="view-title-cluster">
+                <h1>Locație & <span>Contact</span></h1>
+            </div>
+            
+            <div class="contact-view-split">
+                <div class="hardware-map-box">
+                    <iframe src="https://maps.google.com/maps?q=Liceul%20Economic%20Focsani&t=&z=15&ie=UTF8&iwloc=&output=embed"></iframe>
+                </div>
+
+                <div class="personnel-directory-panel">
+                    <div class="directory-header">
+                        <h3>Directorat și Mentori</h3>
+                        <p>Locație: Liceul Economic, Focșani, județul Vrancea, România.</p>
+                    </div>
+
+                    <div class="personnel-scroller">
+                        <div class="personnel-card-row">
+                            <div class="person-identity">
+                                <h4>Profesor Coordonator (Persoana 1)</h4>
+                                <p>Supervizor General Laborator</p>
+                                <div class="person-availability-hours">🕒 Luni - Miercuri: 14:00 - 17:00</div>
+                            </div>
+                            <div class="person-comms-block">
+                                <a href="tel:0700000001" class="phone-anchor">0700 000 001</a><br>
+                                <span class="live-status-pill online">Disponibil</span>
+                            </div>
+                        </div>
+
+                        <div class="personnel-card-row">
+                            <div class="person-identity">
+                                <h4>Mentor Proiectare (Persoana 2)</h4>
+                                <p>Supervizor CAD Avansat</p>
+                                <div class="person-availability-hours">🕒 Marți - Joi: 15:00 - 18:00</div>
+                            </div>
+                            <div class="person-comms-block">
+                                <a href="tel:0700000002" class="phone-anchor">0700 000 002</a><br>
+                                <span class="live-status-pill online">Disponibil</span>
+                            </div>
+                        </div>
+
+                        <div class="personnel-card-row">
+                            <div class="person-identity">
+                                <h4>Mentor Operare CNC (Persoana 3)</h4>
+                                <p>Inginer Control Manufactură</p>
+                                <div class="person-availability-hours">🕒 Vineri: 12:00 - 16:00</div>
+                            </div>
+                            <div class="person-comms-block">
+                                <a href="tel:0700000003" class="phone-anchor">0700 000 003</a><br>
+                                <span class="live-status-pill online">Atelier</span>
+                            </div>
+                        </div>
+
+                        <div class="personnel-card-row">
+                            <div class="person-identity">
+                                <h4>Persoana 4</h4>
+                                <p>Asistent Relații Sponsori</p>
+                                <div class="person-availability-hours">🕒 Luni - Vineri: 09:00 - 13:00</div>
+                            </div>
+                            <div class="person-comms-block">
+                                <a href="tel:0700000004" class="phone-anchor">0700 000 004</a><br>
+                                <span class="live-status-pill online">Online</span>
+                            </div>
+                        </div>
+
+                        <div class="personnel-card-row">
+                            <div class="person-identity">
+                                <h4>Persoana 5</h4>
+                                <p>Coordonator Logistică FTC</p>
+                                <div class="person-availability-hours">🕒 Miercuri: 15:00 - 19:00</div>
+                            </div>
+                            <div class="person-comms-block">
+                                <a href="tel:0700000005" class="phone-anchor">0700 000 005</a><br>
+                                <span class="live-status-pill online">Disponibil</span>
+                            </div>
+                        </div>
+
+                        <div class="personnel-card-row">
+                            <div class="person-identity">
+                                <h4>Persoana 6</h4>
+                                <p>Consultant Tehnic Imprimare 3D</p>
+                                <div class="person-availability-hours">🕒 Joi: 14:00 - 18:00</div>
+                            </div>
+                            <div class="person-comms-block">
+                                <a href="tel:0700000006" class="phone-anchor">0700 000 006</a><br>
+                                <span class="live-status-pill online">Disponibil</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
     <script>
-        gsap.registerPlugin(ScrollTrigger);
-
-        // Animație Hero Text
-        gsap.fromTo(".gsap-elem", 
-            { y: 30, opacity: 0 }, 
-            { y: 0, opacity: 1, duration: 1, stagger: 0.2, ease: "power3.out", delay: 0.3 }
-        );
-
-        // Animație fade-up pe scroll
-        gsap.utils.toArray('.gsap-fade-up').forEach(element => {
-            gsap.fromTo(element, 
-                { y: 60, opacity: 0 }, 
-                { y: 0, opacity: 1, duration: 1, ease: "power2.out",
-                  scrollTrigger: {
-                      trigger: element,
-                      start: "top 85%", 
-                      toggleActions: "play none none reverse"
-                  }
-                }
-            );
-        });
-
-        // Efect pe Navigare la scroll (se face mai neagra cand dai in jos)
-        window.addEventListener("scroll", () => {
-            const nav = document.querySelector("nav");
-            if (window.scrollY > 50) {
-                nav.style.background = "rgba(5, 8, 5, 0.98)";
-                nav.style.padding = "15px 5vw";
+        // --- 1. CONFIGURARE MOTOR ROUTER VIRTUAL (PAGINI SEPARATE IN INDEX) ---
+        function routeVirtual(event, viewId) {
+            if(event) event.preventDefault();
+            
+            const frames = document.querySelectorAll('.view-frame');
+            const activeFrame = document.querySelector('.view-frame.active-view');
+            
+            // Ascunderea paginii active cu efect cinematic
+            if(activeFrame) {
+                activeFrame.style.opacity = '0';
+                activeFrame.style.transform = 'scale(0.98)';
+                setTimeout(() => {
+                    activeFrame.classList.remove('active-view');
+                    executeTargetReveal(viewId);
+                }, 300);
             } else {
-                nav.style.background = "rgba(5, 8, 5, 0.85)";
-                nav.style.padding = "20px 5vw";
-            }
-        });
-
-        // IndexedDB pentru formularul de inscriere
-        (function(){
-            const DB_NAME = 'CemekaniksDB';
-            const DB_VERSION = 1;
-            const STORE_NAME = 'inscrieri';
-            let db;
-
-            function initDB(){
-                const req = indexedDB.open(DB_NAME, DB_VERSION);
-                req.onupgradeneeded = function(e){
-                    db = e.target.result;
-                    if(!db.objectStoreNames.contains(STORE_NAME)){
-                        db.createObjectStore(STORE_NAME, { keyPath: 'id', autoIncrement: true });
-                    }
-                };
-                req.onsuccess = function(e){ db = e.target.result; };
-                req.onerror = function(){ console.warn('IndexedDB error'); };
+                executeTargetReveal(viewId);
             }
 
-            function saveRegistration(data){
-                if(!db) { console.warn('DB not ready'); return; }
-                const tx = db.transaction(STORE_NAME, 'readwrite');
-                const store = tx.objectStore(STORE_NAME);
-                store.add(Object.assign({ createdAt: new Date().toISOString() }, data));
-                tx.oncomplete = function(){ console.log('Inregistrare salvata'); };
-                tx.onerror = function(){ console.warn('Eroare salvare'); };
-            }
+            // Actualizare meniu vizual active state
+            const targetLinks = document.querySelectorAll(`a[onclick*="${viewId}"]`);
+            document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active-route'));
+            targetLinks.forEach(link => link.classList.add('active-route'));
 
-            function findRegistrationForm(){
-                // cautam formularul de inscriere dupa id sau nume care contine 'inscrier'
-                let f = document.querySelector('form#inscriere, form#inscriere-form, form[name*=inscriere], form[id*=inscriere]');
-                if(!f) f = document.querySelector('form'); // fallback: primul formular
-                return f;
-            }
+            // Închide sertarul de mobil automat la rutare
+            document.getElementById('side-drawer').classList.remove('open');
+            resetBurgerIcon();
+        }
 
-            function serializeForm(form){
-                const data = {};
-                new FormData(form).forEach((value, key) => {
-                    if(data[key] !== undefined){
-                        if(!Array.isArray(data[key])) data[key] = [data[key]];
-                        data[key].push(value);
-                    } else data[key] = value;
-                });
-                return data;
+        function executeTargetReveal(viewId) {
+            const nextFrame = document.getElementById(viewId);
+            if(nextFrame) {
+                nextFrame.classList.add('active-view');
+                // Force a reflow for smooth animation
+                nextFrame.offsetHeight; 
+                nextFrame.style.opacity = '1';
+                nextFrame.style.transform = 'scale(1)';
+                window.scrollTo(0,0);
             }
+        }
 
-            document.addEventListener('DOMContentLoaded', function(){
-                initDB();
-                const form = document.getElementById('inscriere-form');
-                if(!form) return;
-                form.addEventListener('submit', function(){
-                    const data = serializeForm(form);
-                    saveRegistration(data);
-                });
+        function toggleMobileDrawer() {
+            const drawer = document.getElementById('side-drawer');
+            drawer.classList.toggle('open');
+            
+            const line1 = document.getElementById('b-line1');
+            const line2 = document.getElementById('b-line2');
+            const line3 = document.getElementById('b-line3');
+
+            if(drawer.classList.contains('open')) {
+                line1.style.transform = 'translateY(8px) rotate(45deg)';
+                line2.style.opacity = '0';
+                line3.style.transform = 'translateY(-8px) rotate(-45deg)';
+            } else {
+                resetBurgerIcon();
+            }
+        }
+
+        function resetBurgerIcon() {
+            document.getElementById('b-line1').style.transform = 'none';
+            document.getElementById('b-line2').style.opacity = '1';
+            document.getElementById('b-line3').style.transform = 'none';
+        }
+
+        // --- 2. MOTOR ALGORITMIC DE CANVAS FLUID (60FPS ACCELERAT) ---
+        const canvas = document.getElementById('fluid-matrix-canvas');
+        const ctx = canvas.getContext('2d');
+        let elementsArray = [];
+
+        function setCanvasContextSize() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', setCanvasContextSize);
+        setCanvasContextSize();
+
+        class ParticleNode {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.radius = Math.random() * 1.5 + 0.5;
+                this.vx = (Math.random() - 0.5) * 0.4;
+                this.vy = (Math.random() - 0.5) * 0.4;
+            }
+            compute() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
+            }
+            render() {
+                ctx.fillStyle = 'rgba(0, 255, 102, 0.25)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function mountEngine() {
+            elementsArray = [];
+            let density = window.innerWidth < 768 ? 35 : 90;
+            for (let i = 0; i < density; i++) {
+                elementsArray.push(new ParticleNode());
+            }
+        }
+        mountEngine();
+
+        function continuousRenderLoop() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            elementsArray.forEach(node => {
+                node.compute();
+                node.render();
             });
+            requestAnimationFrame(continuousRenderLoop);
+        }
+        continuousRenderLoop();
 
-            // Trimite formularul pe email: foloseste EmailJS daca este configurat; altfel deschide mailto
-            async function sendSubmissionByEmail(data){
-                // CONFIGUREAZA: pune valorile tale EmailJS daca doresti trimitere directa (https://www.emailjs.com)
-                const EMAILJS_USER_ID = '';// ex: 'user_xxx'
-                const EMAILJS_SERVICE_ID = '';// ex: 'service_xxx'
-                const EMAILJS_TEMPLATE_ID = '';// ex: 'template_xxx'
-                const TO_EMAIL = 'denisfrancesco009@gmail.com';
+        // --- 3. DOCK TELEMETRIE SIMULATĂ ---
+        setInterval(() => {
+            document.getElementById('tm-freq').innerText = (47.50 + Math.random() * 0.9).toFixed(2) + ' MHz';
+            document.getElementById('tm-volt').innerText = (13.10 + Math.random() * 0.8).toFixed(2) + ' V';
+            document.getElementById('tm-loop').innerText = (1.5 + Math.random() * 0.6).toFixed(1) + ' ms';
+            document.getElementById('tm-temp').innerText = (33.5 + Math.random() * 2.1).toFixed(1) + ' °C';
+        }, 1000);
 
-                // pregatim continut text simplu
-                const subject = 'Noua inregistrare formular';
-                let body = '';
-                for(const k in data){
-                    body += `${k}: ${Array.isArray(data[k]) ? data[k].join(', ') : data[k]}\n`;
-                }
+        // --- 4. COUNTER CARACTERE PENTRU FORMULAR ---
+        function trackChars(textarea) {
+            document.getElementById('char-count-node').innerText = textarea.value.length;
+        }
 
-                if(EMAILJS_USER_ID && EMAILJS_SERVICE_ID && EMAILJS_TEMPLATE_ID){
-                    // trimitem prin EmailJS (client-side). Necesita includerea emailjs SDK sau fetch catre API.
-                    try{
-                        // simplu fetch catre EmailJS REST API
-                        const payload = {
-                            service_id: EMAILJS_SERVICE_ID,
-                            template_id: EMAILJS_TEMPLATE_ID,
-                            user_id: EMAILJS_USER_ID,
-                            template_params: Object.assign({}, data, { to_email: TO_EMAIL, subject, message: body })
-                        };
-                        await fetch('https://api.emailjs.com/api/v1.0/email/send', {
-                            method: 'POST',
-                            headers: { 'Content-Type': 'application/json' },
-                            body: JSON.stringify(payload)
-                        });
-                        return;
-                    }catch(e){
-                        console.warn('EmailJS esuat', e);
-                    }
-                }
+        // --- 5. INTELIGENCE COGNITIVE ENGINE (DICTIONAR PRESTABILIT) ---
+        const RESPONSES_DICTIONARY = {
+            "first": "FIRST (For Inspiration and Recognition of Science and Technology) este cel mai mare ecosistem competițional de robotică global. Acesta îmbină criteriile stricte de inginerie industrială, mecatronică și software cu spiritul de colaborare profesională numit 'Gracious Professionalism'.",
+            "echipa": "Echipa noastră se numește CEMEKANIKS25, având ID-ul oficial în registrul FIRST: #32838. Activăm în Focșani în cadrul Liceului Economic și suntem specializați pe automatizarea mișcărilor prin software Java, prelucrări mecanice avansate la CNC propriu și printare 3D din filamente compozite.",
+            "program": "Profesorul Coordonator (Persoana 1) are un program stabil în incinta laboratorului în zilele de Luni, Marți și Miercuri, în intervalul orar 14:00 - 17:00. În caz de urgențe, îl puteți contacta direct la numărul de telefon afișat în pagina de Contact.",
+            "disponibilitate": "Verificare stoc resurse umane: Mentorii și Persoanele Cheie 1, 2, 4, 5 și 6 sunt marcați în regim de disponibilitate activă. Persoana 3 execută în acest moment operațiuni fizice de calibrare la mașina CNC direct în atelier.",
+            "implicit": "Interogare invalidă. Consola recunoaște cuvinte cheie clare precum: 'FIRST', 'echipa', 'program' sau 'disponibilitate'. Folosește cipurile din stânga pentru asistență rapidă optimizată pentru ecrane tactile."
+        };
 
-                // Fallback: deschidem clientul de mail cu mailto
-                const mailto = `mailto:${encodeURIComponent(TO_EMAIL)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-                // deschidem intr-o fereastra noua
-                window.location.href = mailto;
-            }
-        })();
+        function injectPresetPrompt(text) {
+            document.getElementById('ai-usertext').value = text;
+            processAICoreQuery();
+        }
+
+        function processAICoreQuery() {
+            const inputField = document.getElementById('ai-usertext');
+            const query = inputField.value.trim();
+            if(!query) return;
+
+            const chatHistory = document.getElementById('ai-chathistory');
+
+            // Afișează mesajul trimis de utilizator
+            const userBubble = document.createElement('div');
+            userBubble.className = 'bubble-msg user-query';
+            userBubble.innerText = query;
+            chatHistory.appendChild(userBubble);
+
+            inputField.value = '';
+            chatHistory.scrollTop = chatHistory.scrollHeight;
+
+            // Analizator de intenție
+            setTimeout(() => {
+                const aiBubble = document.createElement('div');
+                aiBubble.className = 'bubble-msg ai-response';
+                
+                let cleanQuery = query.toLowerCase();
+                let output = RESPONSES_DICTIONARY["implicit"];
+
+                if(cleanQuery.includes('first')) output = RESPONSES_DICTIONARY["first"];
+                else if(cleanQuery.includes('echipa') || cleanQuery.includes('cemekanis')) output = RESPONSES_DICTIONARY["echipa"];
+                else if(cleanQuery.includes('profesor') || cleanQuery.includes('coordonator') || cleanQuery.includes('program')) output = RESPONSES_DICTIONARY["program"];
+                else if(cleanQuery.includes('disponibilitate') || cleanQuery.includes('atelier') || cleanQuery.includes('ore')) output = RESPONSES_DICTIONARY["disponibilitate"];
+
+                aiBubble.innerText = output;
+                chatHistory.appendChild(aiBubble);
+                chatHistory.scrollTop = chatHistory.scrollHeight;
+            }, 450);
+        }
+
+        // --- 6. IMPLEMENTARE METODĂ BACKUP PENTRU IMAGINI (INLINE SVG INJECTOR) ---
+        function placeholderSVG(imgElement, text) {
+            imgElement.onerror = null; // Previne loop infinit dacă SVG-ul dă fail
+            imgElement.src = `data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%' viewBox='0 0 100 100'><rect width='100%' height='100%' fill='%230f0f0f'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='%2300ff66' font-family='sans-serif' font-size='8' font-weight='bold'>${text}</text></svg>`;
+        }
     </script>
-
-    <script>
-      window.formspree = window.formspree || function () { (formspree.q = formspree.q || []).push(arguments); };
-      formspree('initForm', { formElement: '#inscriere-form', formId: 'xdavnpnk' });
-    </script>
-    <script src="https://unpkg.com/@formspree/ajax@1" defer></script>
 </body>
 </html>
