@@ -40,7 +40,7 @@
         .logo { font-size: 28px; font-weight: 700; color: var(--text-main); letter-spacing: 2px; display: flex; align-items: center; gap: 10px; }
         .logo span { color: var(--accent); }
         
-        .nav-links { display: flex; gap: 30px; }
+        .nav-links { display: flex; gap: 30px; flex-wrap: wrap; justify-content: center; }
         .nav-links a { 
             color: var(--text-main); text-decoration: none; font-size: 14px; font-weight: 600; 
             letter-spacing: 1px; transition: color 0.3s ease; text-transform: uppercase;
@@ -87,14 +87,24 @@
         .section-header h2 { font-size: 3.5rem; color: var(--text-main); }
         .section-header h2 span { color: var(--accent); }
         
-        .values-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px; }
-        .value-card {
-            background: var(--bg-card); border: 1px solid var(--glass-border); padding: 40px 30px;
-            border-radius: 12px; text-align: center; transition: all 0.4s ease; backdrop-filter: blur(10px);
+        .values-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+        .portal-link {
+            display: block; text-decoration: none; color: inherit;
         }
-        .value-card:hover { transform: translateY(-10px); border-color: var(--accent); box-shadow: 0 10px 30px var(--accent-glow); }
-        .value-card h3 { font-size: 1.8rem; color: var(--accent); margin-bottom: 20px; }
-        .value-card p { color: var(--text-muted); line-height: 1.6; }
+        .portal-link:focus-visible { outline: 3px solid rgba(0,255,65,0.5); outline-offset: 6px; }
+        .value-card {
+            background: rgba(10, 15, 10, 0.75); border: 1px solid var(--glass-border); padding: 40px 30px;
+            border-radius: 16px; text-align: left; transition: transform 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease, background 0.35s ease;
+            backdrop-filter: blur(15px); min-height: 260px;
+        }
+        .value-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent);
+            background: rgba(0, 255, 65, 0.08);
+            box-shadow: 0 18px 40px rgba(0,255,65,0.15);
+        }
+        .value-card h3 { font-size: 1.8rem; color: var(--accent); margin-bottom: 18px; }
+        .value-card p { color: var(--text-muted); line-height: 1.75; }
 
         /* PORTAL RECRUTARE & FORMULAR */
         .recruitment-container {
@@ -146,9 +156,9 @@
 
         .sponsor-img {
             height: 70px; margin: 0 60px; object-fit: contain;
-            filter: grayscale(100%) brightness(0.6); transition: all 0.4s ease;
+            filter: none; transition: transform 0.4s ease, filter 0.4s ease;
         }
-        .sponsor-img:hover { filter: grayscale(0%) brightness(1); transform: scale(1.1); }
+        .sponsor-img:hover { transform: scale(1.05); filter: saturate(1.1) brightness(1.05); }
 
         /* FOOTER */
         footer { padding: 50px 10vw; background: #020302; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--glass-border); }
@@ -170,7 +180,7 @@
 
     <!-- HERO SECTION -->
     <section class="hero">
-        <h1 class="gsap-elem">EVOLUȚIE MECANICĂ</h1>
+        <h1 class="gsap-elem">EVOLUTIE MECANICĂ</h1>
         <h2 class="gsap-elem">RO32838</h2>
         <a href="#filosofie" class="btn-neon gsap-elem" style="margin-top: 20px;">DESCOPERĂ ECHIPA</a>
     </section>
@@ -189,18 +199,24 @@
             <h2>Cultura <span>First Tech Challenge</span></h2>
         </div>
         <div class="values-grid">
-            <div class="value-card gsap-fade-up">
-                <h3>Gracious Professionalism</h3>
-                <p>Respectul reciproc și competiția acerbă pot coexista. Împărtășim cunoștințe, printăm piese 3D pentru alianțe și ridicăm nivelul întregii comunități tehnice.</p>
-            </div>
-            <div class="value-card gsap-fade-up" style="transition-delay: 0.1s;">
-                <h3>Coopertition</h3>
-                <p>Concurăm la cel mai înalt nivel pe teren, dar ajutăm și susținem echipele adverse în pit-uri. Adevărata inginerie nu este limitată de orgolii.</p>
-            </div>
-            <div class="value-card gsap-fade-up" style="transition-delay: 0.2s;">
-                <h3>Inovație Continuă</h3>
-                <p>De la schițe pe hârtie la ansambluri complexe în CAD și rulări de G-code pe router-ul CNC, căutăm mereu să depășim limitele hardware-ului standard.</p>
-            </div>
+            <a href="#filosofie" class="portal-link">
+                <div class="value-card gsap-fade-up">
+                    <h3>Gracious Professionalism</h3>
+                    <p>Respectul reciproc și competiția acerbă pot coexista. Împărtășim cunoștințe, printăm piese 3D pentru alianțe și ridicăm nivelul întregii comunități tehnice.</p>
+                </div>
+            </a>
+            <a href="#valori" class="portal-link">
+                <div class="value-card gsap-fade-up" style="transition-delay: 0.1s;">
+                    <h3>Coopertition</h3>
+                    <p>Concurăm la cel mai înalt nivel pe teren, dar ajutăm și susținem echipele adverse în pit-uri. Adevărata inginerie nu este limitată de orgolii.</p>
+                </div>
+            </a>
+            <a href="#recrutare" class="portal-link">
+                <div class="value-card gsap-fade-up" style="transition-delay: 0.2s;">
+                    <h3>Inovație Continuă</h3>
+                    <p>De la schițe pe hârtie la ansambluri complexe în CAD și rulări de G-code pe router-ul CNC, căutăm mereu să depășim limitele hardware-ului standard.</p>
+                </div>
+            </a>
         </div>
     </section>
 
@@ -278,8 +294,8 @@
     <!-- FOOTER -->
     <footer>
         <div class="footer-info">
-            <p>&copy; 2026 <span>CEMEKANIKS25</span> (RO32838).</p>
-            <p>Liceul Economic M.Kogalniceanu, Focșani, România.</p>
+            <p>&copy; 2026 <span>CEMEKANIKS25</span> (32838).</p>
+            <p>Liceul Economic M.Kogalniceanu, Focsani, România.</p>
         </div>
 
     </footer>
