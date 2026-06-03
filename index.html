@@ -229,20 +229,28 @@
             <!-- Formular Interactiv -->
             <div class="form-box">
                 <h3 style="color: var(--text-main); margin-bottom: 30px; font-size: 1.8rem;">Formular Înscriere Voluntari</h3>
-                <form action="#" method="POST">
+
+                <div data-fs-success style="display:none;color:var(--accent);margin-bottom:10px;">Mulțumim — aplicația ta a fost trimisă.</div>
+                <div data-fs-error style="display:none;color:#ff6b6b;margin-bottom:10px;"></div>
+
+                <form id="inscriere-form" action="https://formspree.io/f/xdavnpnk" method="POST">
+                    <input type="hidden" name="_subject" value="Aplicație Cemekaniks25">
                     <div class="form-group">
                         <label>Nume și Prenume</label>
-                        <input type="text" class="form-control" placeholder="ex: Popescu Ion" required>
+                        <input type="text" name="nume" class="form-control" placeholder="ex: Popescu Ion" required data-fs-field>
+                        <span data-fs-error="nume"></span>
                     </div>
                     <div class="form-group">
                         <label>Clasa și Profilul</label>
-                        <input type="text" class="form-control" placeholder="ex: a 9-a, Matematică-Informatică" required>
+                        <input type="text" name="clasa" class="form-control" placeholder="ex: a 9-a, Matematică-Informatică" required data-fs-field>
+                        <span data-fs-error="clasa"></span>
                     </div>
                     <div class="form-group">
                         <label>De ce vrei în Cemekaniks25?</label>
-                        <textarea class="form-control" placeholder="Spune-ne despre pasiunea ta pentru robotică, programare, design 3D sau PR..." required></textarea>
+                        <textarea name="motivatie" class="form-control" placeholder="Spune-ne despre pasiunea ta pentru robotică, programare, design 3D sau PR..." required data-fs-field></textarea>
+                        <span data-fs-error="motivatie"></span>
                     </div>
-                    <button type="submit" class="btn-neon" style="width: 100%; text-align: center; margin-top: 10px;">TRIMITE APLICAȚIA</button>
+                    <button type="submit" class="btn-neon" style="width: 100%; text-align: center; margin-top: 10px;" data-fs-submit-btn>TRIMITE APLICAȚIA</button>
                 </form>
             </div>
         </div>
@@ -311,6 +319,111 @@
                 nav.style.padding = "20px 5vw";
             }
         });
+
+        // IndexedDB pentru formularul de inscriere
+        (function(){
+            const DB_NAME = 'CemekaniksDB';
+            const DB_VERSION = 1;
+            const STORE_NAME = 'inscrieri';
+            let db;
+
+            function initDB(){
+                const req = indexedDB.open(DB_NAME, DB_VERSION);
+                req.onupgradeneeded = function(e){
+                    db = e.target.result;
+                    if(!db.objectStoreNames.contains(STORE_NAME)){
+                        db.createObjectStore(STORE_NAME, { keyPath: 'id', autoIncrement: true });
+                    }
+                };
+                req.onsuccess = function(e){ db = e.target.result; };
+                req.onerror = function(){ console.warn('IndexedDB error'); };
+            }
+
+            function saveRegistration(data){
+                if(!db) { console.warn('DB not ready'); return; }
+                const tx = db.transaction(STORE_NAME, 'readwrite');
+                const store = tx.objectStore(STORE_NAME);
+                store.add(Object.assign({ createdAt: new Date().toISOString() }, data));
+                tx.oncomplete = function(){ console.log('Inregistrare salvata'); };
+                tx.onerror = function(){ console.warn('Eroare salvare'); };
+            }
+
+            function findRegistrationForm(){
+                // cautam formularul de inscriere dupa id sau nume care contine 'inscrier'
+                let f = document.querySelector('form#inscriere, form#inscriere-form, form[name*=inscriere], form[id*=inscriere]');
+                if(!f) f = document.querySelector('form'); // fallback: primul formular
+                return f;
+            }
+
+            function serializeForm(form){
+                const data = {};
+                new FormData(form).forEach((value, key) => {
+                    if(data[key] !== undefined){
+                        if(!Array.isArray(data[key])) data[key] = [data[key]];
+                        data[key].push(value);
+                    } else data[key] = value;
+                });
+                return data;
+            }
+
+            document.addEventListener('DOMContentLoaded', function(){
+                initDB();
+                const form = document.getElementById('inscriere-form');
+                if(!form) return;
+                form.addEventListener('submit', function(){
+                    const data = serializeForm(form);
+                    saveRegistration(data);
+                });
+            });
+
+            // Trimite formularul pe email: foloseste EmailJS daca este configurat; altfel deschide mailto
+            async function sendSubmissionByEmail(data){
+                // CONFIGUREAZA: pune valorile tale EmailJS daca doresti trimitere directa (https://www.emailjs.com)
+                const EMAILJS_USER_ID = '';// ex: 'user_xxx'
+                const EMAILJS_SERVICE_ID = '';// ex: 'service_xxx'
+                const EMAILJS_TEMPLATE_ID = '';// ex: 'template_xxx'
+                const TO_EMAIL = 'denisfrancesco009@gmail.com';
+
+                // pregatim continut text simplu
+                const subject = 'Noua inregistrare formular';
+                let body = '';
+                for(const k in data){
+                    body += `${k}: ${Array.isArray(data[k]) ? data[k].join(', ') : data[k]}\n`;
+                }
+
+                if(EMAILJS_USER_ID && EMAILJS_SERVICE_ID && EMAILJS_TEMPLATE_ID){
+                    // trimitem prin EmailJS (client-side). Necesita includerea emailjs SDK sau fetch catre API.
+                    try{
+                        // simplu fetch catre EmailJS REST API
+                        const payload = {
+                            service_id: EMAILJS_SERVICE_ID,
+                            template_id: EMAILJS_TEMPLATE_ID,
+                            user_id: EMAILJS_USER_ID,
+                            template_params: Object.assign({}, data, { to_email: TO_EMAIL, subject, message: body })
+                        };
+                        await fetch('https://api.emailjs.com/api/v1.0/email/send', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(payload)
+                        });
+                        return;
+                    }catch(e){
+                        console.warn('EmailJS esuat', e);
+                    }
+                }
+
+                // Fallback: deschidem clientul de mail cu mailto
+                const mailto = `mailto:${encodeURIComponent(TO_EMAIL)}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                // deschidem intr-o fereastra noua
+                window.location.href = mailto;
+            }
+        })();
     </script>
+
+    <script>
+      window.formspree = window.formspree || function () { (formspree.q = formspree.q || []).push(arguments); };
+      formspree('initForm', { formElement: '#inscriere-form', formId: 'xdavnpnk' });
+    </script>
+    <script src="https://unpkg.com/@formspree/ajax@1" defer></script>
 </body>
 </html>
